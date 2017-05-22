@@ -1,10 +1,10 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, flash
 import os, shelve
 from web_app import utils
 
 app = Flask(__name__)
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc'])
 
-# @app.route('/', methods = ['GET'])
 def get_project_info():
 
     response_text =  'Hi, User! It\'s simple json repository based on Flask. Enjoy it'
@@ -22,21 +22,27 @@ def download_file():
         return render_template('file_form.html')
 
     elif request.method == 'POST':
+        if request.form['filetag'] == " ":
+            flash('Empty tag')
+            return redirect('/storage/files/')
+
         file = request.files['file_input']
-        # filatag = request.form['filetag']
         filename_origin = file.filename
-        filename_saved = utils.unigue_filename(filename_origin)
-        update_data = [{'filename_origin': file.filename}, {'filename_saved': filename_saved}]
 
-        with shelve.open('shelve_lib') as db:
-            if request.form['filetag'] in db:
-                db[request.form['filetag']] += update_data
-            elif not request.form['filetag'] in db:
-                db[request.form['filetag']] = update_data
+        if file and filename_origin.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS:
+            filename_saved = utils.unigue_filename(filename_origin)
+            update_data = [{'filename_origin': file.filename}, {'filename_saved': filename_saved}]
 
-        file.filename = filename_saved
-        filepath = os.path.join('media', file.filename)
-        file.save(filepath)
+            with shelve.open('shelve_lib') as db:
+                if request.form['filetag'] in db:
+                    db[request.form['filetag']] += update_data
+                elif not request.form['filetag'] in db:
+                    db[request.form['filetag']] = update_data
+
+            file.filename = filename_saved
+            filepath = os.path.join('media', file.filename)
+            file.save(filepath)
+            flash('File "{}" with tag "{}" succesfully saved in database'.format(filename_origin, request.form['filetag']))
 
         return redirect('/storage/files/')
 
