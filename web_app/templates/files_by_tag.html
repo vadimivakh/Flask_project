@@ -3,10 +3,10 @@
     <title>Stat</title>
   </head>
   <body>
-    <h1>Returns all filenames wit tag "{{filetag}}"</h1>
+    <h1>All original filenames wit tag "{{filetag}}":</h1>
     {% if info %}
         {% for el in info %}
-        <p>{{el}}"</p>
+        <p>{{count}}{{el['filename_origin']}}"</p>
         {% endfor %}
     {% else %}
     Sorry, but there is no file(s) with tag "{{filetag}}" in database

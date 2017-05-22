@@ -9,7 +9,8 @@ with shelve.open('shelve_lib') as db:
 
     for tag in db.keys():
         print(tag,':')
-        for value in db.values():
-            for every in value[::2]:
-                print(every['filename_origin'])
-        print('\n')
+        for value in db[tag][::2]:
+            print(value['filename_origin'])
+        #     for every in value:
+        #         print(every['filename_origin'])
+        # print('\n')

@@ -4,13 +4,11 @@
   </head>
   <body>
     <h1>Statistics:</h1>
-    {% for key in posts.keys() %}
-          <h3>Tag: "{{key}}" :</h3>
-      {% for el in posts.values() %}
-          {% for every in el[::2] %}
-                <p> - {{every['filename_origin']}}"</p>
+    {% for tag in posts.keys() %}
+          <h3>Tag "{{tag}}" consists of:</h3>
+      {% for value in posts[tag][::2] %}
+                <p> - {{value['filename_origin']}}"</p>
 
-          {% endfor %}
         {% endfor %}
     {% endfor %}
   </body>
