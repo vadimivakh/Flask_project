@@ -1,0 +1,15 @@
+<html>
+  <head>
+    <title>Stat</title>
+  </head>
+  <body>
+    <h1>Returns all filenames wit tag "{{filetag}}"</h1>
+    {% if info %}
+        {% for el in info %}
+        <p>{{el}}"</p>
+        {% endfor %}
+    {% else %}
+    Sorry, but there is no file(s) with tag "{{filetag}}" in database
+    {% endif %}
+  </body>
+</html>

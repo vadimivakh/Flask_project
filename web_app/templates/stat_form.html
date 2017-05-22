@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <title>Stat</title>
+  </head>
+  <body>
+    <h1>Statistics:</h1>
+    {% for key in posts.keys() %}
+          <h3>Tag: "{{key}}" :</h3>
+      {% for el in posts.values() %}
+          {% for every in el[::2] %}
+                <p> - {{every['filename_origin']}}"</p>
+
+          {% endfor %}
+        {% endfor %}
+    {% endfor %}
+  </body>
+</html>
