@@ -1,5 +1,6 @@
 import shelve, random, string
 
+
 def unigue_filename(filename):
 
     filename_without_ext = filename.split('.')[0]

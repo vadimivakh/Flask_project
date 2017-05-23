@@ -1,9 +1,5 @@
 import subprocess, imp
 
-#TODO:
-#1)download all python packages
-#2)Create empty storage if it need it
-#3)Create database file to track changes
 
 def download_dependences():
 
@@ -31,6 +27,7 @@ def download_dependences():
         else:
             exit(1)
 
+
 def initialize_env():
     # create directory, where we will save storage
     # create db file->shelve lib
@@ -38,10 +35,11 @@ def initialize_env():
     if not os.path.isdir('media'):
         os.mkdir('media')
         print('Directory "media" created')
-        file = open('e:\\Python projects\\flask_project_1\\json_repository-master\\media\\shelve_lib.dat', 'w')
+        open('e:\\Python projects\\flask_project_1\\json_repository-master\\media\\shelve_lib.dat', 'w')
         print('File "shelve_lib.dat" created')
     else:
         print('Directory "media" already exists')
+
 
 def run_application():
     from web_app import application

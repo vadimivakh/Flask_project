@@ -1,0 +1,7 @@
+# $ cat .gitignore
+
+media/
+*.bak
+*.dat
+*.dir
+12.py

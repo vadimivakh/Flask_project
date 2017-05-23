@@ -7,17 +7,19 @@
 <body>
 
     <form action="/storage/files/" method = "POST" enctype="multipart/form-data">
-        <div>
+        <div> <p>
         <label for="Filetag">File tag </label>
-        <input type = 'text' name = "filetag" id="filetag" required>
+        <input type = 'text' name = "filetag" id="filetag" required placeholder = 'Input file_tag'> </p>
         </div>
 
-        <div>
+        <div> <p>
         <label for="file_input">File</label>
-        <input type = 'file' id = "file_input" name = "file_input" required>
+        <input type = 'file' id = "file_input" name = "file_input" required multiple> </p>
         </div>
 
          <input type = 'submit' value = "Send info">
+
+         <input type="reset" value="Refresh">
 
     </form>
 

@@ -2,9 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 function</title>
+    <title>Update</title>
 </head>
 <body>
-5 func
+
+<p><form action="/storage/files/<tag>/<filename>" method = "POST" enctype="multipart/form-data"></form></p>
+        <div>
+            <p><label for="Filetag">File tag </label>
+        <input type = 'text' name = "filetag" id="filetag" required value = {{tag}}></p>
+        </div>
+
+        <div>
+            <p> <label for="filename">Filename</label>
+        <input type = 'text' id = "filename" name = "filename" required value = {{filename}}> </p>
+        </div>
+
+         <input type = 'submit' value = "Send info">
+
+         <input type="reset" value="Refresh">
+
+    </form>
+
 </body>
 </html>
