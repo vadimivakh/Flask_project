@@ -6,12 +6,12 @@
     <h1>Statistical data:</h1>
     {% for tag in posts.keys() %}
           <h3>Tag "{{tag}}" have the following file(s):</h3>
-      {% for value in posts[tag][::2] %}
-    <p> <style>
+      {% for value in posts[tag] %}
+    <p> <style >
           P {
-            text-indent: 1.5em; /* Отступ первой строки */
+            text-indent: 1.5em;
             }
-  </style>  - {{value['filename_origin']}}"</p>
+  </style>  - {{value['filename_origin']}}</p>
 
         {% endfor %}
     {% endfor %}
