@@ -19,4 +19,5 @@ def _init_routes(web_app):
 
     web_app.add_url_rule('/storage/uploads/<tag>/<path:filename>', methods=['GET'], view_func=views.uploaded_file)
 
+
 _init_routes(app)

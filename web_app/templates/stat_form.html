@@ -4,16 +4,16 @@
   </head>
   <body>
     <h1>Statistical data:</h1>
-    {% for tag in posts.keys() %}
-          <h3>Tag "{{tag}}" have the following file(s):</h3>
-      {% for value in posts[tag] %}
-    <p> <style >
-          P {
-            text-indent: 1.5em;
-            }
-  </style>  - {{value['filename_origin']}}</p>
-
+    {% if posts %}
+        {% for tag in posts.keys() %}
+              <h3>Tag "{{tag}}" have the following file(s):</h3>
+            {% for value in posts[tag] %}
+                <p> - {{value['filename_origin']}}</p>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
+
+    {% else %}
+            Database is empty
+    {% endif %}
   </body>
 </html>

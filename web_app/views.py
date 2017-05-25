@@ -4,7 +4,7 @@ import shelve
 from web_app.utils import unigue_filename
 
 app = Flask(__name__)
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc'])
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx'])
 DBname = 'shelve_lib'
 UPLOAD_FOLDER = 'E:\\Python projects\\FLASK_repository_project\\media'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -17,7 +17,8 @@ def get_project_info():
 
 def get_storage_stat():
     with shelve.open(DBname) as db:
-        return render_template('stat_form.html', posts=db)
+        database = db
+        return render_template('stat_form.html', posts=database)
 
 
 def download_file():
@@ -56,27 +57,35 @@ def upload_files(tag):
         with shelve.open(DBname) as database:
             if tag in database:
                 result += database[tag]
-    return render_template('files_by_tag.html', filetag=tag, info=result)
+    return render_template('files_by_tag.html', filetag=tag, database=result)
 
 
 def update_file(tag, filename):
-    pass
-    # if request.method == 'GET':
-    #     return render_template('update.html', tag=tag, filename=filename)
-    #
-    # elif request.method == 'POST':
-    #     pass
+    if request.method == 'GET':
+        flag = False
+        with shelve.open(DBname) as database:
+            if not tag in database:
+                return 'no {} in database'.format(tag)
+            else:
+                for file_name in database[tag]:
+                    if file_name['filename_origin'] == filename:
+                        flag = True
+                        break
+        if flag:
+            return render_template('update.html', tag=tag, filename=filename)
+        return "no file with tag {} in database".format(tag)
+
+    elif request.method == 'POST':
+        return 'ok'
 
 
 def uploaded_file(tag, filename):
-
     with shelve.open(DBname) as database:
         if tag in database:
             for every_tag in database.values():
                 for every_dict in every_tag:
                     if every_dict['filename_origin'] == filename:
                         filename = every_dict['filename_saved']
-                        print(filename)
                         break
 
     response = make_response(send_from_directory(app.config['UPLOAD_FOLDER'], filename))

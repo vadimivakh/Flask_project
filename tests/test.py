@@ -11,11 +11,12 @@ class RepositoryTestCase(unittest.TestCase):
         response = self.app.get('/')
         assert response.status_code == 200
         assert b'simply' in response.data
+        self.assertIn()
 
     def test_hello_world(self):
         response = self.app.get('/')
         assert response.status_code == 200
-        assert b'Hello' in response.data
+        assert b'Hi' in response.data
         #
         # def test_new_product(self):
         #     response = self.app.get('/products/create')

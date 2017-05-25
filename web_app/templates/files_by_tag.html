@@ -3,13 +3,15 @@
     <title>Stat</title>
   </head>
   <body>
-    <h1>All original filenames wit tag "{{filetag}}":</h1>
-    {% if info %}
-        {% for el in info %}
-        <p>{{count}}{{el['filename_origin']}}"</p>
-        {% endfor %}
-    {% else %}
-    Sorry, but there is no file(s) with tag "{{filetag}}" in database
+    <h1>All files with filetag "{{filetag}}" available for download:</h1>
+    {% if database %}
+            {% for tag in database %}
+
+                <p> <a href="/storage/uploads/{{filetag}}/{{tag['filename_origin']}}">{{tag['filename_origin']}}</a></p>
+
+            {% endfor %}
+        {% else %}
+            Sorry, but there is no file(s) with tag "{{filetag}}" in database
     {% endif %}
   </body>
 </html>
