@@ -4,8 +4,24 @@
     <meta charset="UTF-8">
     <title>Download</title>
 </head>
-<body>
+<style>
+  body { background-color: #B0E0E6;
+        color: #000000;
+</style>
 
+    <form action="/">
+        <p><button type="submit">Main page</button></p>
+    </form>
+
+    <form action="/storage/stat">
+        <p><button type="submit">Statistics</button></p>
+    </form>
+
+    <form action="/storage/files">
+        <p><button type="submit">Updating</button></p>
+    </form>
+-------------------------------------------------------------
+<p>Downloading:</p>
     <form action="/storage/files/" method = "POST" enctype="multipart/form-data">
         <div> <p>
         <label for="Filetag">File tag </label>

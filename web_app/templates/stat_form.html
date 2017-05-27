@@ -2,8 +2,24 @@
   <head>
     <title>Stat</title>
   </head>
-  <body>
+  <style>
+  body { background-color: #B0E0E6;
+        color: #000000;
+</style>
+    <form action="/">
+        <p><button type="submit">Main page</button></p>
+    </form>
+    <form action="/storage/files">
+        <p><button type="submit">Downloading</button></p>
+    </form>
+    <form action="/storage/files">
+        <p><button type="submit">Updating</button></p>
+    </form>
+  -------------------------------------------------------------
+  {% if posts %}
     <h1>Statistical data:</h1>
+    {% endif %}
+
     {% if posts %}
         {% for tag in posts.keys() %}
               <h3>Tag "{{tag}}" have the following file(s):</h3>
@@ -12,8 +28,8 @@
             {% endfor %}
         {% endfor %}
 
-    {% else %}
-            Database is empty
+        {% else %}
+    <p> Database is empty</p>
     {% endif %}
   </body>
 </html>

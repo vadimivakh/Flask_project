@@ -3,6 +3,7 @@ import subprocess, imp
 
 def download_dependences():
     module_name = 'flask'
+
     try:
         imp.find_module(module_name)
         print('Module \'{}\' found'.format(module_name))

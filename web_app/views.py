@@ -1,13 +1,16 @@
 from flask import Flask, request, render_template, redirect, flash, send_from_directory, make_response
+# from werkzeug.exceptions import notfound
 import os
 import shelve
 from web_app.utils import unigue_filename
+from unidecode import unidecode
 
 app = Flask(__name__)
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx'])
 DBname = 'shelve_lib'
-UPLOAD_FOLDER = 'E:\\Python projects\\FLASK_repository_project\\media'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# UPLOAD_FOLDER = 'E:\\Python projects\\FLASK_repository_project\\media'
+app.config['UPLOAD_FOLDER'] = os.path.join(
+    os.path.dirname(__file__), os.path.pardir, 'media')
 
 
 def get_project_info():
@@ -65,18 +68,26 @@ def update_file(tag, filename):
         flag = False
         with shelve.open(DBname) as database:
             if not tag in database:
-                return 'no {} in database'.format(tag)
+                return 'no tag "{}" in database'.format(tag)
             else:
                 for file_name in database[tag]:
                     if file_name['filename_origin'] == filename:
+                        filename_saved_db = file_name['filename_saved']
                         flag = True
                         break
         if flag:
-            return render_template('update.html', tag=tag, filename=filename)
+            return render_template('update.html', tag=tag, filename=filename, filename_saved = filename_saved_db)
         return "no file with tag {} in database".format(tag)
 
     elif request.method == 'POST':
-        return 'ok'
+        filename = request.form['filename']
+        filetag = request.form['filetag']
+        filename_saved = request.form['silename_saved']
+
+        update_data = [{'filename_origin': filename, 'filename_saved': filename_saved}]
+        with shelve.open(DBname) as database:
+            db[filetag] = update_data
+        return redirect('/storage/files/<filetag>')
 
 
 def uploaded_file(tag, filename):
@@ -86,9 +97,11 @@ def uploaded_file(tag, filename):
                 for every_dict in every_tag:
                     if every_dict['filename_origin'] == filename:
                         filename = every_dict['filename_saved']
+                        print(filename)
                         break
 
-    response = make_response(send_from_directory(app.config['UPLOAD_FOLDER'], filename))
-    response.headers['Content-Disposition'] = "attachment; filename=%s" % filename
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True, attachment_filename = unidecode(filename))
+    # response = make_response(send_from_directory(app.config['UPLOAD_FOLDER'], filename))
+    # response.headers['Content-Disposition'] = 'attachment; filename="%s"' % filename.encode('UTF-8')
 
     return response
