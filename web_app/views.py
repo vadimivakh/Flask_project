@@ -8,7 +8,7 @@ from unidecode import unidecode
 app = Flask(__name__)
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx'])
 DBname = 'shelve_lib'
-# UPLOAD_FOLDER = 'E:\\Python projects\\FLASK_repository_project\\media'
+# UPLOAD_FOLDER = 'E:\\Python projects\\flask_repository_project\\media'
 app.config['UPLOAD_FOLDER'] = os.path.join(
     os.path.dirname(__file__), os.path.pardir, 'media')
 
@@ -19,8 +19,7 @@ def get_project_info():
 
 
 def get_storage_stat():
-    with shelve.open(DBname) as db:
-        database = db
+    with shelve.open(DBname) as database:
         return render_template('stat_form.html', posts=database)
 
 
@@ -76,18 +75,32 @@ def update_file(tag, filename):
                         flag = True
                         break
         if flag:
-            return render_template('update.html', tag=tag, filename=filename, filename_saved = filename_saved_db)
+            return render_template('update.html', tag=tag, filename=filename, filename_saved=filename_saved_db,
+                                   old_tag=tag)
         return "no file with tag {} in database".format(tag)
 
     elif request.method == 'POST':
+        count = 0
+        old_tag = request.form['old_tag']
         filename = request.form['filename']
         filetag = request.form['filetag']
-        filename_saved = request.form['silename_saved']
-
+        filename_saved = request.form['filename_saved']
         update_data = [{'filename_origin': filename, 'filename_saved': filename_saved}]
+
         with shelve.open(DBname) as database:
-            db[filetag] = update_data
-        return redirect('/storage/files/<filetag>')
+            if filetag in database:
+                database[filetag] += update_data
+            else:
+                database[filetag] = update_data
+
+        with shelve.open('shelve_lib') as database:
+            for note in database[old_tag]:
+                if note['filename_origin'] == filename:
+                    break
+                else:
+                    count+=1
+            database[old_tag] = database[old_tag][:count:] + database[old_tag][count+1::]
+        return redirect('/storage/stat/')
 
 
 def uploaded_file(tag, filename):
@@ -97,11 +110,9 @@ def uploaded_file(tag, filename):
                 for every_dict in every_tag:
                     if every_dict['filename_origin'] == filename:
                         filename = every_dict['filename_saved']
-                        print(filename)
                         break
 
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True, attachment_filename = unidecode(filename))
-    # response = make_response(send_from_directory(app.config['UPLOAD_FOLDER'], filename))
-    # response.headers['Content-Disposition'] = 'attachment; filename="%s"' % filename.encode('UTF-8')
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True,
+                               attachment_filename=unidecode(filename))
 
     return response

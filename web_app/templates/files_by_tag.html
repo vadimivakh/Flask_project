@@ -6,6 +6,18 @@
   body { background-color: #B0E0E6;
         color: #000000;
 </style>
+
+    <form action="/">
+        <p><button type="submit">Main page</button></p>
+    </form>
+    <form action="/storage/files">
+        <p><button type="submit">Downloading</button></p>
+    </form>
+    <form action="/storage/files">
+        <p><button type="submit">Updating</button></p>
+    </form>
+  -------------------------------------------------------------
+
     <h1>All files with filetag "{{filetag}}" available for download:</h1>
     {% if database %}
             {% for tag in database %}
