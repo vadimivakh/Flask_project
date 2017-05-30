@@ -8,7 +8,6 @@ from unidecode import unidecode
 app = Flask(__name__)
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx'])
 DBname = 'shelve_lib'
-# UPLOAD_FOLDER = 'E:\\Python projects\\flask_repository_project\\media'
 app.config['UPLOAD_FOLDER'] = os.path.join(
     os.path.dirname(__file__), os.path.pardir, 'media')
 
@@ -20,6 +19,9 @@ def get_project_info():
 
 def get_storage_stat():
     with shelve.open(DBname) as database:
+        for key, value in dict(database).items():
+            if not len(value):
+                database.pop(key)
         return render_template('stat_form.html', posts=database)
 
 
@@ -98,8 +100,8 @@ def update_file(tag, filename):
                 if note['filename_origin'] == filename:
                     break
                 else:
-                    count+=1
-            database[old_tag] = database[old_tag][:count:] + database[old_tag][count+1::]
+                    count += 1
+            database[old_tag] = database[old_tag][:count:] + database[old_tag][count + 1::]
         return redirect('/storage/stat/')
 
 
@@ -114,5 +116,4 @@ def uploaded_file(tag, filename):
 
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True,
                                attachment_filename=unidecode(filename))
-
     return response
