@@ -49,9 +49,10 @@ def download_file():
             file.filename = filename_saved
             filepath = os.path.join('media', file.filename)
             file.save(filepath)
-            flash('File "{}" with tag "{}" succesfully saved in database'
+            flash('File "{}" with tag "{}" successfully saved in database'
                   .format(filename_origin, request.form['filetag']))
-
+        else:
+            flash('Prohibited extension of file')
         return redirect('/storage/files/')
 
 
@@ -94,6 +95,7 @@ def update_file(tag, filename):
                 database[filetag] += update_data
             else:
                 database[filetag] = update_data
+        flash('Changes were made to the database. {} with filetag {}'.format(filename, filetag))
 
         with shelve.open('shelve_lib') as database:
             for note in database[old_tag]:
